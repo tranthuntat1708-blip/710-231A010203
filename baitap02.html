@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Bài tập 02 - Form đăng ký</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  font-family: Arial;
+  padding: 20px;
+}
+
+form {
+  max-width: 400px;
+  margin: auto;
+  border: 1px solid #ccc;
+  padding: 20px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin: 8px 0;
+}
+
+button {
+  padding: 10px;
+  width: 100%;
+}
+
+.error { color: red; }
+.success { color: green; }
+</style>
+</head>
+
+<body>
+
+<h2 align="center">Đăng ký người dùng</h2>
+
+<form id="registerForm">
+  <input type="text" id="name" placeholder="Họ tên">
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Mật khẩu">
+  <label>
+    <input type="checkbox" id="agree"> Đồng ý điều khoản
+  </label>
+  <br><br>
+  <button type="submit">Đăng ký</button>
+  <p id="msg"></p>
+</form>
+
+<script>
+document.getElementById("registerForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const agree = document.getElementById("agree").checked;
+  const msg = document.getElementById("msg");
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+  if (!name || !email || !password) {
+    msg.textContent = "Vui lòng nhập đầy đủ thông tin";
+    msg.className = "error";
+    return;
+  }
+
+  if (!emailRegex.test(email)) {
+    msg.textContent = "Email không hợp lệ";
+    msg.className = "error";
+    return;
+  }
+
+  if (!passRegex.test(password)) {
+    msg.textContent = "Mật khẩu yếu";
+    msg.className = "error";
+    return;
+  }
+
+  if (!agree) {
+    msg.textContent = "Bạn chưa đồng ý điều khoản";
+    msg.className = "error";
+    return;
+  }
+
+  localStorage.setItem("user", JSON.stringify({ name, email }));
+
+  msg.textContent = "Đăng ký thành công!";
+  msg.className = "success";
+});
+</script>
+
+</body>
+</html>
